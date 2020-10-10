@@ -6,7 +6,35 @@
 ![项目效果3](./test3_20201010.gif)![项目效果4](./test4_20201010.gif)  
 ## 在项目中添加依赖  
 * Gradle  
+ 1.Add it in your root build.gradle at the end of repositories:
+```java  
+allprojects {
+    repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+    }
+    }  
+```  
+2.Add the dependency  
+```java  
+dependencies {
+    implementation 'com.github.hanjie511:PickPhotoView:1.0.0'
+  }  
+```  
 * Maven  
+```java  
+<repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+<dependency>
+    <groupId>com.github.hanjie511</groupId>
+    <artifactId>PickPhotoView</artifactId>
+    <version>1.0.0</version>
+</dependency>  
+```
 ## 在项目中引用  
 * Step1  在在布局文件中添加布局  
 ```java  
