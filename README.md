@@ -1,5 +1,5 @@
 # takePhoto
-简单实现android端从设备上获得图片的功能(适配了android10+的Scope Storage文件存储的及访问的新特性)
+简单实现android端从设备上获得图片的功能(适配了android10+的Scope Storage文件存储及访问的新特性)
 ## 效果预览
 * 效果图中第二个图片显示控件是我测试返回的照片路径能否在scope storage新特新下被加载出来而写的一个测试控件。
 ![项目效果1](./test1_20201010.gif)![项目效果2](./test2_20201010.gif)  
