@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+        <external-path
+            name="my_images"
+            path="Android/data/com.example.hj.mylibrary/files/Pictures"/>
+<!--        <external-path name="name" path="path" />-->
+<!--        Represents files in the root of the external storage area. &ndash;&gt;-->
+<!--        The root path of this subdirectory is the same as the value returned by -->
+<!--            Environment.getExternalStorageDirectory().-->
+</paths>
+    <!--
+            <paths xmlns:android="http://schemas.android.com/apk/res/android">
+                <files-path name="my_images" path="images/"/>
+                <files-path name="my_docs" path="docs/"/>
+            </paths>
+            Represents files in the files/ subdirectory of your app's internal storage area.
+            This subdirectory is the same as the value returned by Context.getFilesDir().
+            For example, suppose your app is offering files to other apps with a FileProvider that has the authority com.mydomain.fileprovider.
+            To get a content URI for the file default_image.jpg in the images/ subdirectory of your internal storage add the following code:
+            File imagePath = new File(Context.getFilesDir(), "images");
+            File newFile = new File(imagePath, "default_image.jpg");
+            Uri contentUri = getUriForFile(getContext(), "com.mydomain.fileprovider", newFile);
+    -->

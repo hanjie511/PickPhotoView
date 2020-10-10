@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ImageBucketActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/bucket_toolbar_hj_pickphoto"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@color/colorPrimary"
+        app:layout_constraintRight_toRightOf="parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="相册列表"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bucketRecyclerView_hj_pickphoto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+  />
+</LinearLayout>

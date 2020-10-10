@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/goPhoto_hj_pickphoto" android:title="拍照"></item>
+    <item android:id="@+id/goPicture_hj_pickphoto" android:title="从相册中选取"></item>
+    <item android:id="@+id/cancel_hj_pickphoto" android:title="取消"></item>
+</menu>

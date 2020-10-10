@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="90dp" android:layout_height="90dp">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/pretty"
+        android:scaleType="centerCrop"
+        android:id="@+id/imageView_imageRecycler_hj_pickphoto"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:theme="@style/My_CheckBox"
+        android:id="@+id/checkbox_imageRecycler_hj_pickphoto"
+        />
+</FrameLayout>
