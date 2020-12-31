@@ -4,21 +4,22 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme1">
+        >
         <activity android:name=".PhotoPreviewActivity"
             android:theme="@style/PhotoPreviewTheme"
             ></activity>
 
-        <activity android:name=".ChooseImageActivity" />
+        <activity android:name=".ChooseImageActivity"
+            android:theme="@style/AppTheme1"
+            />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".ImageBucketActivity" />
+        <activity android:name=".ImageBucketActivity"
+            android:theme="@style/AppTheme1"
+            />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.hj.mylibrary.fileprovider"

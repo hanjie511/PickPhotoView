@@ -3,7 +3,9 @@
         <external-path
             name="my_images"
             path="Android/data/com.example.hj.mylibrary/files/Pictures"/>
-<!--        <external-path name="name" path="path" />-->
+<!--        com.example.hj.mylibrary.fileprovider/my_images/Android/data/yys.sxyh/files/Pictures/JPEG_20201231_103241_7214450539869030112.jpg-->
+
+        <!--        <external-path name="name" path="path" />-->
 <!--        Represents files in the root of the external storage area. &ndash;&gt;-->
 <!--        The root path of this subdirectory is the same as the value returned by -->
 <!--            Environment.getExternalStorageDirectory().-->
