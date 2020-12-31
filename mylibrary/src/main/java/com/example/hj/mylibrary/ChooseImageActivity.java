@@ -66,7 +66,7 @@ public class ChooseImageActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             for(Uri str:ImagePath.bucketList){
-                                if(ImagePath.pathList.size()<9){
+                                if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
                                     String path=copyFile(str);
                                     ImagePath.pathList.add(path);
                                 }
@@ -76,7 +76,7 @@ public class ChooseImageActivity extends AppCompatActivity {
                     }).start();
                 }else{
                     for(String str:ImagePath.bucketPathList){
-                        if(ImagePath.pathList.size()<9){
+                        if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
                             ImagePath.pathList.add(str);
                         }
                     }

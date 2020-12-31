@@ -50,7 +50,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.VH> {
                            listener.click(holder,position);
                         }
                     });
-                if(i==9){
+                if(i==ImagePath.maxPictureNum){
                     vh.image.setVisibility(View.GONE);
                 }
 

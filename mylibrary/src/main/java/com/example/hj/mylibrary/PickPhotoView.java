@@ -60,7 +60,9 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
         this.activity = (Activity) context;
         initView(context, activity);
     }
-
+    public void setMaxPhotoNumber(int number){
+        ImagePath.maxPictureNum=number;
+    }
     public PickPhotoView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
@@ -146,7 +148,7 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
 //            Bundle extras = data.getExtras();
 //            Bitmap imageBitmap = (Bitmap) extras.get("data");
 //            imageView.setImageBitmap(imageBitmap);
-            if(ImagePath.pathList.size()<9){
+            if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
                 galleryAddPic();
                 photoList.add(contentUri);
                 ImagePath.pathList.add(currentPhotoPath);

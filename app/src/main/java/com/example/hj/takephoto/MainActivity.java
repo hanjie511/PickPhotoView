@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         context=MainActivity.this;
         pickPhotoView=findViewById(R.id.pickPhotoView);
         recyclerview_main=findViewById(R.id.recyclerview_main);
+        pickPhotoView.setMaxPhotoNumber(1);
+        pickPhotoView.setPhotoListChangedListener(this);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(MainActivity.this,3);
         adapter=new RecyclerAdapter(pathList,MainActivity.this);
         recyclerview_main.setLayoutManager(gridLayoutManager);

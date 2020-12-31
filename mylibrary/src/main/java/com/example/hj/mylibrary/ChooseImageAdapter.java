@@ -60,18 +60,18 @@ public class ChooseImageAdapter extends RecyclerView.Adapter<ChooseImageAdapter.
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    if(picture_num<9){
+                    if(picture_num<ImagePath.maxPictureNum){
                         holder.imageView.setAlpha(0.5f);
-                        if(ImagePath.pathList.size()<9){
+                        if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
                             ImagePath.bucketList.add(Uri.parse(map.get("uri")));
                             ImagePath.bucketPathList.add(map.get("data"));
                         }
                         picture_num=picture_num+1;
-                        confirm_btn.setText("("+picture_num+"/9)完成");
+                        confirm_btn.setText("("+picture_num+"/"+ImagePath.maxPictureNum+")完成");
                         confirm_btn.setVisibility(View.VISIBLE);
                     }else{
                         compoundButton.setChecked(false);
-                        Toast.makeText(context, "您只能选取9张图片", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "您只能选取"+ImagePath.maxPictureNum+"张图片", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     holder.imageView.setAlpha(1.0f);
@@ -79,7 +79,7 @@ public class ChooseImageAdapter extends RecyclerView.Adapter<ChooseImageAdapter.
                         picture_num=picture_num-1;
                         ImagePath.bucketList.remove(list.get(position).get("uri"));
                         ImagePath.bucketPathList.remove(list.get(position).get("data"));
-                        confirm_btn.setText("("+picture_num+"/9)完成");
+                        confirm_btn.setText("("+picture_num+"/"+ImagePath.maxPictureNum+")完成");
                     }
                     if(picture_num==0){
                         confirm_btn.setText("完成");
