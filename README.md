@@ -50,6 +50,7 @@ private PickPhotoView pickPhotoView;
 .
 .  
 pickPhotoView=findViewById(R.id.pickPhotoView);
+pickPhotoView.setMaxPhotoNumber(int count);//设置最多可以选择图片的数量，可以不用设置，默认为9张
 pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
     @Override
     public void getPhotoList(List<String> pathList) {
