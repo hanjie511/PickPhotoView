@@ -32,7 +32,7 @@ dependencies {
 <dependency>
     <groupId>com.github.hanjie511</groupId>
     <artifactId>PickPhotoView</artifactId>
-    <version>1.0.0</version>
+    <version>2.2.0</version>
 </dependency>  
 ```
 ## 在项目中引用  
