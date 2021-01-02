@@ -116,23 +116,11 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
  pickPhotoView1.handleRequestPermissionResult(requestCode,permissions,grantResults);
   }
 ```
-* Step4在引用的项目中的AndroidManifest.xml文件添加provider  
-```java
-<provider
- android:name="androidx.core.content.FileProvider"
- android:authorities="com.example.hj.mylibrary.fileprovider"
- android:exported="false"
- android:grantUriPermissions="true">
- <meta-data
-      android:name="android.support.FILE_PROVIDER_PATHS"
-      android:resource="@xml/file_path" />
-</provider>  
-```
-* Step5 在引用项目的xml/file_path文件中添加如下内容  
+* Step4 在引用项目的xml/file_path文件中添加如下内容  
 ```java  
 <external-path
   name="my_images"
-  path="Android/data/${applicationId}/files/Pictures"/> 
+  path=""/> 
 ```  
      
 ### 通过以上操作，我们就实现了在设备上获取图片的功能，不需要再写其他多余的代码了。  
