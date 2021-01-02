@@ -50,6 +50,10 @@ private PickPhotoView pickPhotoView;
 .
 .  
 pickPhotoView=findViewById(R.id.pickPhotoView);
+pickPhotoView.setREQUEST_CODE_CAMERA(int requestCode);\\设置拍照的requestCode
+pickPhotoView.setREQUEST_CODE_CHOOSE_PICTURE(int requestCode);\\设置从相册中选择图片的requesCode
+pickPhotoView.setREQUEST_CODE_PREVIEW_PICTURE(int requestCode);\\设置预览照片的requestCode
+pickPhotoView.setREQUEST_CODE_READ_EXTERNAL_STORAGE(int requestCode);\\设置读取外部存储权限的requestCode
 pickPhotoView.setMaxPhotoNumber(int count);//设置最多可以选择图片的数量，可以不用设置，默认为9张
 pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
     @Override
@@ -73,7 +77,46 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
     pickPhotoView.handleRequestPermissionResult(requestCode,permissions,grantResults);
   }  
 ```  
-* Step4在引用的项目中添加provider  
+* eg:  
+```java  
+ pickPhotoView=findViewById(R.id.pickPhotoView);
+ pickPhotoView.setMaxPhotoNumber(9);
+ pickPhotoView.setREQUEST_CODE_CAMERA(1);
+ pickPhotoView.setREQUEST_CODE_CHOOSE_PICTURE(2);
+ pickPhotoView.setREQUEST_CODE_PREVIEW_PICTURE(3);
+ pickPhotoView.setREQUEST_CODE_READ_EXTERNAL_STORAGE(4);
+ pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
+  @Override
+  public void getPhotoList(List<String> pathList) {
+    System.out.println("pathList.size:"+pathList.size());
+    }
+  });
+ pickPhotoView1=findViewById(R.id.pickPhotoView1);
+ pickPhotoView1.setMaxPhotoNumber(4);
+ pickPhotoView1.setREQUEST_CODE_CAMERA(5);
+ pickPhotoView1.setREQUEST_CODE_CHOOSE_PICTURE(6);
+ pickPhotoView1.setREQUEST_CODE_PREVIEW_PICTURE(7);
+ pickPhotoView1.setREQUEST_CODE_READ_EXTERNAL_STORAGE(8);
+ pickPhotoView1.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
+ @Override
+ public void getPhotoList(List<String> pathList) {
+  System.out.println("pathList.size1:"+pathList.size());
+   }
+ });
+ }
+ @Override
+ protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+ super.onActivityResult(requestCode, resultCode, data);
+ pickPhotoView.handleOnActivityResult(requestCode,resultCode,data);
+ pickPhotoView1.handleOnActivityResult(requestCode,resultCode,data);
+  }
+ @Override
+ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+ pickPhotoView.handleRequestPermissionResult(requestCode,permissions,grantResults);
+ pickPhotoView1.handleRequestPermissionResult(requestCode,permissions,grantResults);
+  }
+```
+* Step4在引用的项目中的AndroidManifest.xml文件添加provider  
 ```java
 <provider
  android:name="androidx.core.content.FileProvider"
@@ -85,7 +128,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
       android:resource="@xml/file_path" />
 </provider>  
 ```
-* Step5 在xml/file_path文件中添加如下内容  
+* Step5 在引用项目的xml/file_path文件中添加如下内容  
 ```java  
 <external-path
   name="my_images"
