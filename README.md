@@ -36,7 +36,7 @@ dependencies {
 </dependency>  
 ```
 ## 在项目中引用  
-* Step1  在在布局文件中添加布局  
+* Step1  在布局文件中添加布局  
 ```java  
 <com.example.hj.mylibrary.PickPhotoView
   android:layout_width="match_parent"
