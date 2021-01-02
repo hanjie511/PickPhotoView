@@ -1,7 +1,9 @@
 package com.example.hj.mylibrary;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,12 +20,18 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.VH> {
-    List<String> list=new ArrayList<>();
+    ArrayList<String> list=new ArrayList<>();
     Context context;
     OnItemClickListener listener;
-    public RecyclerAdapter(List<String> list, Context context){
+    private int maxPictureNum;
+    private Activity activity;
+    private int REQUEST_CODE_PREVIEW_PICTURE;
+    public RecyclerAdapter(ArrayList<String> list, Context context, int maxPictureNum, Activity activity,int requestCode){
         this.list=list;
         this.context=context;
+        this.maxPictureNum=maxPictureNum;
+        this.activity=activity;
+        this.REQUEST_CODE_PREVIEW_PICTURE=requestCode;
     }
     static  class  VH extends RecyclerView.ViewHolder{
         ImageView image;
@@ -43,14 +51,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.VH> {
         final RecyclerView.ViewHolder holder=vh;
         final int position=i;
             if(i==list.size()){
-                    vh.image.setImageResource(R.drawable.ic_add_photo_hj_takephoto);
+                    vh.image.setImageResource(R.drawable.ic_add_pic);
+                    vh.image.setScaleType(ImageView.ScaleType.CENTER);
                     vh.image.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           listener.click(holder,position);
+                            try {
+                                listener.click(holder,position);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
-                if(i==ImagePath.maxPictureNum){
+                if(i==maxPictureNum){
                     vh.image.setVisibility(View.GONE);
                 }
 
@@ -61,7 +74,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.VH> {
                     public void onClick(View view) {
                         Intent intent=new Intent(context,PhotoPreviewActivity.class);
                         intent.putExtra("path",list.get(position));
-                        context.startActivity(intent);
+                        intent.putStringArrayListExtra("pictureList",list);
+                        intent.putExtra("requestCode",REQUEST_CODE_PREVIEW_PICTURE);
+                        activity.startActivityForResult(intent,REQUEST_CODE_PREVIEW_PICTURE);
                     }
                 });
 
@@ -76,6 +91,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.VH> {
         listener=l;
     }
 public interface  OnItemClickListener{
-        void click(RecyclerView.ViewHolder holder, int position);
+        void click(RecyclerView.ViewHolder holder, int position) throws Exception;
 }
 }

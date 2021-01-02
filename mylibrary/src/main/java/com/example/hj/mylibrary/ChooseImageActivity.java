@@ -33,13 +33,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ChooseImageActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
     String bucketName = "";
     Context context;
     ChooseImageAdapter adapter;
+    RecyclerView recyclerView;
     ArrayList<Map<String,String>>list=new ArrayList<Map<String,String>>();
     Button confirm_btn;
-    static BucketListChangedListener bucketListChangedListener;
+    private  ArrayList<Uri> bucketList=new ArrayList<>();
+    private  ArrayList<String> bucketPathList=new ArrayList<>();
+    private int maxPictureNum=9;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +51,15 @@ public class ChooseImageActivity extends AppCompatActivity {
         if (intent.getStringExtra("bucketName") != null) {
             bucketName = intent.getStringExtra("bucketName");
         }
-        ImagePath.bucketPathList.clear();
-        ImagePath.bucketList.clear();
+        maxPictureNum=intent.getIntExtra("maxPictureNum",9);
+        bucketPathList.clear();
+        bucketList.clear();
         recyclerView = findViewById(R.id.chooseImage_recycler_hj_pickphoto);
         confirm_btn=findViewById(R.id.confirm_btn_hj_pickphoto);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 4);
         recyclerView.setLayoutManager(gridLayoutManager);
         getPictureList(bucketName);
-        adapter=new ChooseImageAdapter(list,confirm_btn,context);
+        adapter=new ChooseImageAdapter(list,confirm_btn,context,maxPictureNum);
         recyclerView.setAdapter(adapter);
         confirm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,22 +68,18 @@ public class ChooseImageActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            for(Uri str:ImagePath.bucketList){
-                                if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
+                            for(Uri str:adapter.getBucketList()){
                                     String path=copyFile(str);
-                                    ImagePath.pathList.add(path);
-                                }
+                                    bucketPathList.add(path);
                             }
-                            bucketListChangedListener.getBucket(ImagePath.pathList);
+                 //           bucketListChangedListener.getBucket(bucketPathList);
                         }
                     }).start();
                 }else{
-                    for(String str:ImagePath.bucketPathList){
-                        if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
-                            ImagePath.pathList.add(str);
-                        }
+                    for(String str:adapter.getBucketPathList()){
+                            bucketPathList.add(str);
                     }
-                    bucketListChangedListener.getBucket(ImagePath.bucketPathList);
+               //     bucketListChangedListener.getBucket(bucketPathList);
                 }
                 finish();
             }
@@ -132,14 +131,14 @@ public class ChooseImageActivity extends AppCompatActivity {
     public void back(View view){
         Intent intent=new Intent(ChooseImageActivity.this,ImageBucketActivity.class);
         startActivity(intent);
-        ImagePath.bucketList.clear();
-        ImagePath.bucketPathList.clear();
+        bucketList.clear();
+        bucketPathList.clear();
         finish();
     }
-    protected  static void setBucketListChangedListener(BucketListChangedListener bucketListChangedListener){
-        ChooseImageActivity.bucketListChangedListener=bucketListChangedListener;
-    }
-    protected interface BucketListChangedListener{
-        void getBucket(List<String> list);
-    }
+//    protected static void setBucketListChangedListener(BucketListChangedListener bucketListChangedListener){
+//        ChooseImageActivity.bucketListChangedListener=bucketListChangedListener;
+//    }
+//    protected interface BucketListChangedListener{
+//        void getBucket(List<String> list);
+//    }
 }

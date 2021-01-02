@@ -22,9 +22,9 @@
     android:layout_height="wrap_content"
     android:id="@+id/pickPhotoView"
     />
-<androidx.recyclerview.widget.RecyclerView
-    android:layout_width="match_parent"
-    android:id="@+id/recyclerview_main"
-    android:layout_height="wrap_content"
-/>
+    <com.example.hj.mylibrary.PickPhotoView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pickPhotoView1"
+        />
 </LinearLayout>

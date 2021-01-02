@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileUtils;
 import android.provider.MediaStore;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -42,26 +44,64 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PickPhotoView extends LinearLayout implements ChooseImageActivity.BucketListChangedListener,PhotoPreviewActivity.ImageListChangedListener {
+public class PickPhotoView extends LinearLayout{
     private RecyclerView recycler_hj_pickphoto;
     private Context context;
     private Activity activity;
     private RecyclerAdapter adapter;
     private ArrayList<Uri> list;
-    private static final int TAKE_PHOTO = 1;
-    public static final int REQUEST_CODE_CAMERA = 1;
-    public static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 2;
+    public  int REQUEST_CODE_CAMERA = -1;
+    public  int REQUEST_CODE_CHOOSE_PICTURE =-1;
+    public  int REQUEST_CODE_PREVIEW_PICTURE =-1;
+    public  int REQUEST_CODE_READ_EXTERNAL_STORAGE =-1;
     private PhotoListChangedListener photoListChangedListener;
     public List<Uri> photoList = new ArrayList<>();
-    public List<String> photoList1 = new ArrayList<>();
-    public PickPhotoView(Context context) {
+    public ArrayList<String> photoList1 = new ArrayList<>();
+    public List<Uri> bucketList1 = new ArrayList<>();
+    private int maxPhotoNum=9;
+
+    public PickPhotoView(Context context){
         super(context);
         this.context = context;
         this.activity = (Activity) context;
         initView(context, activity);
     }
+    public int getREQUEST_CODE_CAMERA() {
+        return REQUEST_CODE_CAMERA;
+    }
+
+    public void setREQUEST_CODE_CAMERA(int REQUEST_CODE_CAMERA) {
+        this.REQUEST_CODE_CAMERA = REQUEST_CODE_CAMERA;
+    }
+
+    public int getREQUEST_CODE_CHOOSE_PICTURE() {
+        return REQUEST_CODE_CHOOSE_PICTURE;
+    }
+
+    public void setREQUEST_CODE_CHOOSE_PICTURE(int REQUEST_CODE_CHOOSE_PICTURE) {
+        this.REQUEST_CODE_CHOOSE_PICTURE = REQUEST_CODE_CHOOSE_PICTURE;
+    }
+
+    public int getREQUEST_CODE_PREVIEW_PICTURE() {
+        return REQUEST_CODE_PREVIEW_PICTURE;
+    }
+
+    public void setREQUEST_CODE_PREVIEW_PICTURE(int REQUEST_CODE_PREVIEW_PICTURE) {
+        this.REQUEST_CODE_PREVIEW_PICTURE = REQUEST_CODE_PREVIEW_PICTURE;
+    }
+
+    public int getREQUEST_CODE_READ_EXTERNAL_STORAGE() {
+        return REQUEST_CODE_READ_EXTERNAL_STORAGE;
+    }
+
+    public void setREQUEST_CODE_READ_EXTERNAL_STORAGE(int REQUEST_CODE_READ_EXTERNAL_STORAGE) {
+        this.REQUEST_CODE_READ_EXTERNAL_STORAGE = REQUEST_CODE_READ_EXTERNAL_STORAGE;
+    }
     public void setMaxPhotoNumber(int number){
-        ImagePath.maxPictureNum=number;
+        this.maxPhotoNum=number;
+    }
+    public int getMaxPhotoNum(){
+        return  this.maxPhotoNum;
     }
     public PickPhotoView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -71,19 +111,20 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
     }
 
     private void initView(final Context context, final Activity activity) {
+
         View view = LayoutInflater.from(context).inflate(R.layout.activity_main_hj_pickphoto, null, false);
         recycler_hj_pickphoto = view.findViewById(R.id.recycler_hj_pickphoto);
         GridLayoutManager layout = new GridLayoutManager(context, 3);
         recycler_hj_pickphoto.setLayoutManager(layout);
-        ImagePath.pathList.clear();
-        //  adapter = new RecyclerAdapter(photoList, context);
-        adapter = new RecyclerAdapter(ImagePath.pathList, context);
-        ChooseImageActivity.setBucketListChangedListener(this);
-        PhotoPreviewActivity.setImageListChangedListener(this);
+        photoList1.clear();
+        adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
         recycler_hj_pickphoto.setAdapter(adapter);
         adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
-            public void click(RecyclerView.ViewHolder holder, int position) {
+            public void click(RecyclerView.ViewHolder holder, int position) throws Exception {
+                if(REQUEST_CODE_CAMERA==-1||REQUEST_CODE_CHOOSE_PICTURE==-1||REQUEST_CODE_PREVIEW_PICTURE==-1||REQUEST_CODE_READ_EXTERNAL_STORAGE==-1){
+                    throw new Exception("REQUEST_CODE not init Exception");
+                }
                 PopupMenu menu = new PopupMenu(context, holder.itemView, Gravity.BOTTOM);
                 final PopupMenu menu1 = menu;
                 menu.getMenuInflater().inflate(R.menu.pop_menu, menu.getMenu());
@@ -100,9 +141,11 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
                             }
                         } else if (itemId == R.id.goPicture_hj_pickphoto) {
                             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                                ImagePath.bucketList.clear();
+                                bucketList1.clear();
                                 Intent intent = new Intent(context, ImageBucketActivity.class);
-                                context.startActivity(intent);
+                                intent.putExtra("maxPictureNum",maxPhotoNum);
+                                intent.putExtra("requestCode",REQUEST_CODE_CHOOSE_PICTURE);
+                                activity.startActivityForResult(intent,REQUEST_CODE_CHOOSE_PICTURE);
                             } else {
                                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_READ_EXTERNAL_STORAGE);
                             }
@@ -123,41 +166,60 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
     }
 
     public void handleRequestPermissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    photo();
-                } else {
-                    Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case 2:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    ImagePath.bucketList.clear();
-                    Intent intent = new Intent(context, ImageBucketActivity.class);
-                    context.startActivity(intent);
-                } else {
-                    Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
-                }
-                break;
+        if(requestCode==REQUEST_CODE_CAMERA){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                photo();
+            } else {
+                Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
+            }
+        }else if(requestCode==REQUEST_CODE_READ_EXTERNAL_STORAGE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bucketList1.clear();
+                Intent intent = new Intent(context, ImageBucketActivity.class);
+                intent.putExtra("maxPictureNum",maxPhotoNum);
+                activity.startActivityForResult(intent,REQUEST_CODE_CHOOSE_PICTURE);
+            } else {
+                Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
+            }
         }
+//        switch (requestCode) {
+//            case REQUEST_CODE_CAMERA:
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    photo();
+//                } else {
+//                    Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            case REQUEST_CODE_READ_EXTERNAL_STORAGE:
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    bucketList1.clear();
+//                    Intent intent = new Intent(context, ImageBucketActivity.class);
+//                    intent.putExtra("maxPictureNum",maxPhotoNum);
+//                    activity.startActivityForResult(intent,REQUEST_CODE_CHOOSE_PICTURE);
+//                } else {
+//                    Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//        }
     }
-
     public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == activity.RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            imageView.setImageBitmap(imageBitmap);
-            if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
+            if(photoList1.size()<maxPhotoNum){
+                if(currentPhotoPath==null){
+                    return;
+                }
                 galleryAddPic();
                 photoList.add(contentUri);
-                ImagePath.pathList.add(currentPhotoPath);
-                photoListChangedListener.getPhotoList(ImagePath.pathList);
-                adapter = new RecyclerAdapter(ImagePath.pathList, context);
+                photoList1.add(currentPhotoPath);
+                photoListChangedListener.getPhotoList(photoList1);
+                adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
                 recycler_hj_pickphoto.setAdapter(adapter);
                 adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
                     @Override
-                    public void click(RecyclerView.ViewHolder holder, int position) {
+                    public void click(RecyclerView.ViewHolder holder, int position) throws Exception {
+                        if(REQUEST_CODE_CAMERA==-1||REQUEST_CODE_CHOOSE_PICTURE==-1||REQUEST_CODE_PREVIEW_PICTURE==-1||REQUEST_CODE_READ_EXTERNAL_STORAGE==-1){
+                            throw new Exception("REQUEST_CODE not init Exception");
+                        }
                         PopupMenu menu = new PopupMenu(context, holder.itemView, Gravity.BOTTOM);
                         final PopupMenu menu1 = menu;
                         menu.getMenuInflater().inflate(R.menu.pop_menu, menu.getMenu());
@@ -174,9 +236,11 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
                                     }
                                 } else if (itemId == R.id.goPicture_hj_pickphoto) {
                                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                                        ImagePath.bucketList.clear();
+                                        bucketList1.clear();
                                         Intent intent = new Intent(context, ImageBucketActivity.class);
-                                        context.startActivity(intent);
+                                        intent.putExtra("maxPictureNum",maxPhotoNum);
+                                        intent.putExtra("requestCode",REQUEST_CODE_CHOOSE_PICTURE);
+                                        activity.startActivityForResult(intent,REQUEST_CODE_CHOOSE_PICTURE);
                                     } else {
                                         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_READ_EXTERNAL_STORAGE);
                                     }
@@ -190,6 +254,35 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
                     }
                 });
             }
+        }else if(requestCode==REQUEST_CODE_CHOOSE_PICTURE){//选择相册图片的回调
+            String [] array=data.getStringArrayExtra("chooseImagePicture");
+            for (String str : array) {
+                if (photoList1.size() < maxPhotoNum) {
+                    photoList1.add(str);
+                }
+            }
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
+                    recycler_hj_pickphoto.setAdapter(adapter);
+                }
+            });
+            photoListChangedListener.getPhotoList(photoList1);
+        }else if(requestCode==REQUEST_CODE_PREVIEW_PICTURE){
+            ArrayList<String> list=data.getStringArrayListExtra("previewPictureList");
+            photoList1.clear();
+            for(String str:list){
+                photoList1.add(str);
+            }
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
+                    recycler_hj_pickphoto.setAdapter(adapter);
+                    photoListChangedListener.getPhotoList(photoList1);
+                }
+            });
         }
     }
 
@@ -276,30 +369,6 @@ public class PickPhotoView extends LinearLayout implements ChooseImageActivity.B
             }
         }
     }
-
-    @Override
-    public void getBucket(List<String> list) {
-        System.out.println("getBucket.list.size:"+list.size());
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
-        photoListChangedListener.getPhotoList(ImagePath.pathList);
-    }
-
-    @Override
-    public void getImageChangedList() {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-                photoListChangedListener.getPhotoList(ImagePath.pathList);
-            }
-        });
-    }
-
     public interface PhotoListChangedListener {
         void getPhotoList(List<String> pathList);
     }

@@ -33,18 +33,22 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView delete_photoPreview_hj_takePhoto;
     private ImageView croup_photoPreview_hj_takePhoto;
-    private static ImageListChangedListener imageListChangedListener;
     private MyPagerAdapter myPageAdapter;
+    private ArrayList<String> pictureList=new ArrayList<>();
+    private int REQUEST_CODE_PREVIEW_PICTURE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_preview);
         toolbar=findViewById(R.id.toolbar_photoPreview_hj_takePhoto);
         setSupportActionBar(toolbar);
+        receiveData();
         initView();
     }
-    protected static void setImageListChangedListener(ImageListChangedListener imageListChangedListener){
-        PhotoPreviewActivity.imageListChangedListener=imageListChangedListener;
+    private void receiveData(){
+        Intent intent=getIntent();
+        pictureList=intent.getStringArrayListExtra("pictureList");
+        REQUEST_CODE_PREVIEW_PICTURE=intent.getIntExtra("requestCode",-1);
     }
     String destiPath="";
     private void initView(){
@@ -55,6 +59,9 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.putStringArrayListExtra("previewPictureList",pictureList);
+                setResult(REQUEST_CODE_PREVIEW_PICTURE,intent);
                 finish();
             }
         });
@@ -63,12 +70,15 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         delete_photoPreview_hj_takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ImagePath.pathList.size()>1){
-                    ImagePath.pathList.remove(currentPosition);
+                if(pictureList.size()>1){
+                    pictureList.remove(currentPosition);
                     viewPager_hj_takePhoto.setAdapter(new MyPagerAdapter());
                     currentPosition=0;
                 }else{
-                    ImagePath.pathList.remove(currentPosition);
+                    pictureList.remove(currentPosition);
+                    Intent intent=new Intent();
+                    intent.putStringArrayListExtra("previewPictureList",pictureList);
+                    setResult(REQUEST_CODE_PREVIEW_PICTURE,intent);
                     finish();
                 }
             }
@@ -77,7 +87,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Uri sourceUri = Uri.fromFile(new File(ImagePath.pathList.get(currentPosition)));
+                    Uri sourceUri = Uri.fromFile(new File(pictureList.get(currentPosition)));
                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                     String imageFileName = "JPEG_" + timeStamp + "_";
                     File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -115,25 +125,27 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
-    protected void onDestroy() {
-        imageListChangedListener.getImageChangedList();
-        super.onDestroy();
+    public void onBackPressed() {
+        Intent intent=new Intent();
+        intent.putStringArrayListExtra("previewPictureList",pictureList);
+        setResult(REQUEST_CODE_PREVIEW_PICTURE,intent);
+        finish();
     }
+
     class MyPagerAdapter extends PagerAdapter {
         MyPagerAdapter(){
         }
         @Override
         public int getCount() {
-            return ImagePath.pathList.size();
+            return pictureList.size();
         }
 
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             PhotoView photo=new PhotoView(PhotoPreviewActivity.this);
-            Bitmap bitmap = BitmapFactory.decodeFile(ImagePath.pathList.get(position));
+            Bitmap bitmap = BitmapFactory.decodeFile(pictureList.get(position));
             photo.setImageBitmap(bitmap);
             container.addView(photo);
             return photo;
@@ -162,14 +174,11 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
-            ImagePath.pathList.set(currentPosition,destiPath);
+            pictureList.set(currentPosition,destiPath);
             viewPager_hj_takePhoto.setAdapter(new MyPagerAdapter());
             currentPosition=0;
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
         }
-    }
-    protected  interface ImageListChangedListener{
-        void getImageChangedList();
     }
 }

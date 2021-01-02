@@ -27,6 +27,9 @@ public class ChooseImageAdapter extends RecyclerView.Adapter<ChooseImageAdapter.
     ArrayList<Map<String, String>> list;
     Context context;
     int picture_num=0;
+    private int maxPictureNum;
+    private ArrayList<Uri> bucketList=new ArrayList<>();
+    private ArrayList<String> bucketPathList=new ArrayList<>();
     static class VH extends RecyclerView.ViewHolder {
         ImageView imageView;
         CheckBox checkBox;
@@ -37,11 +40,26 @@ public class ChooseImageAdapter extends RecyclerView.Adapter<ChooseImageAdapter.
             checkBox = view.findViewById(R.id.checkbox_imageRecycler_hj_pickphoto);
         }
     }
+    protected ArrayList<Uri> getBucketList() {
+        return bucketList;
+    }
 
-    public ChooseImageAdapter(ArrayList<Map<String, String>> list, Button btn,Context context) {
+    protected void setBucketList(ArrayList<Uri> bucketList) {
+        this.bucketList = bucketList;
+    }
+
+    protected ArrayList<String> getBucketPathList() {
+        return bucketPathList;
+    }
+
+    protected void setBucketPathList(ArrayList<String> bucketPathList) {
+        this.bucketPathList = bucketPathList;
+    }
+    public ChooseImageAdapter(ArrayList<Map<String, String>> list, Button btn,Context context,int maxPictureNum) {
         this.list = list;
         confirm_btn = btn;
         this.context=context;
+        this.maxPictureNum=maxPictureNum;
     }
 
     @NonNull
@@ -60,26 +78,26 @@ public class ChooseImageAdapter extends RecyclerView.Adapter<ChooseImageAdapter.
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    if(picture_num<ImagePath.maxPictureNum){
+                    if(picture_num<maxPictureNum){
                         holder.imageView.setAlpha(0.5f);
-                        if(ImagePath.pathList.size()<ImagePath.maxPictureNum){
-                            ImagePath.bucketList.add(Uri.parse(map.get("uri")));
-                            ImagePath.bucketPathList.add(map.get("data"));
+                        if(picture_num<maxPictureNum){
+                            bucketList.add(Uri.parse(map.get("uri")));
+                            bucketPathList.add(map.get("data"));
                         }
                         picture_num=picture_num+1;
-                        confirm_btn.setText("("+picture_num+"/"+ImagePath.maxPictureNum+")完成");
+                        confirm_btn.setText("("+picture_num+"/"+maxPictureNum+")完成");
                         confirm_btn.setVisibility(View.VISIBLE);
                     }else{
                         compoundButton.setChecked(false);
-                        Toast.makeText(context, "您只能选取"+ImagePath.maxPictureNum+"张图片", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "您只能选取"+maxPictureNum+"张图片", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     holder.imageView.setAlpha(1.0f);
                     if(picture_num>0){
                         picture_num=picture_num-1;
-                        ImagePath.bucketList.remove(list.get(position).get("uri"));
-                        ImagePath.bucketPathList.remove(list.get(position).get("data"));
-                        confirm_btn.setText("("+picture_num+"/"+ImagePath.maxPictureNum+")完成");
+                        bucketList.remove(list.get(position).get("uri"));
+                        bucketPathList.remove(list.get(position).get("data"));
+                        confirm_btn.setText("("+picture_num+"/"+maxPictureNum+")完成");
                     }
                     if(picture_num==0){
                         confirm_btn.setText("完成");
