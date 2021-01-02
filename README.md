@@ -18,7 +18,7 @@ allprojects {
 2.Add the dependency  
 ```java  
 dependencies {
-    implementation 'com.github.hanjie511:PickPhotoView:1.0.0'
+    implementation 'com.github.hanjie511:PickPhotoView:v2.2.0'
   }  
 ```  
 * Maven  
