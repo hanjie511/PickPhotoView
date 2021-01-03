@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         context=MainActivity.this;
         pickPhotoView=findViewById(R.id.pickPhotoView);
-        pickPhotoView.setMaxPhotoNumber(9);
+        pickPhotoView.setMaxPhotoNumber(1);
+        pickPhotoView.setRecyclerViewColumn(1);
         pickPhotoView.setREQUEST_CODE_CAMERA(1);
         pickPhotoView.setREQUEST_CODE_CHOOSE_PICTURE(2);
         pickPhotoView.setREQUEST_CODE_PREVIEW_PICTURE(3);
@@ -48,8 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("pathList.size:"+pathList.size());
             }
         });
+        pickPhotoView.initView(MainActivity.this);
         pickPhotoView1=findViewById(R.id.pickPhotoView1);
-        pickPhotoView1.setMaxPhotoNumber(4);
+        pickPhotoView1.setMaxPhotoNumber(1);
+        pickPhotoView.setRecyclerViewColumn(1);
         pickPhotoView1.setREQUEST_CODE_CAMERA(5);
         pickPhotoView1.setREQUEST_CODE_CHOOSE_PICTURE(6);
         pickPhotoView1.setREQUEST_CODE_PREVIEW_PICTURE(7);
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("pathList.size1:"+pathList.size());
             }
         });
+        pickPhotoView1.initView(MainActivity.this);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {

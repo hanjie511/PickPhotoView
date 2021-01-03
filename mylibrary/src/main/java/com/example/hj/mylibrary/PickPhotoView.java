@@ -60,11 +60,20 @@ public class PickPhotoView extends LinearLayout{
     public List<Uri> bucketList1 = new ArrayList<>();
     private int maxPhotoNum=9;
 
+    public int getRecyclerViewColumn() {
+        return recyclerViewColumn;
+    }
+
+    public void setRecyclerViewColumn(int recyclerViewColumn) {
+        this.recyclerViewColumn = recyclerViewColumn;
+    }
+
+    private int recyclerViewColumn=3;
     public PickPhotoView(Context context){
         super(context);
         this.context = context;
         this.activity = (Activity) context;
-        initView(context, activity);
+     //   initView(context, activity);
     }
     public int getREQUEST_CODE_CAMERA() {
         return REQUEST_CODE_CAMERA;
@@ -103,18 +112,24 @@ public class PickPhotoView extends LinearLayout{
     public int getMaxPhotoNum(){
         return  this.maxPhotoNum;
     }
-    public PickPhotoView(Context context, @Nullable AttributeSet attrs) {
+    public PickPhotoView(Context context, @Nullable AttributeSet attrs){
         super(context, attrs);
         this.context = context;
         this.activity = (Activity) context;
-        initView(context, activity);
+     //   initView(context, activity);
     }
 
-    private void initView(final Context context, final Activity activity) {
-
+    public void initView(final Context context){
         View view = LayoutInflater.from(context).inflate(R.layout.activity_main_hj_pickphoto, null, false);
         recycler_hj_pickphoto = view.findViewById(R.id.recycler_hj_pickphoto);
-        GridLayoutManager layout = new GridLayoutManager(context, 3);
+        if(recyclerViewColumn>3){
+            try {
+                throw new Exception("recyclerViewColumn not over 3");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        GridLayoutManager layout = new GridLayoutManager(context, recyclerViewColumn);
         recycler_hj_pickphoto.setLayoutManager(layout);
         photoList1.clear();
         adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
@@ -182,25 +197,6 @@ public class PickPhotoView extends LinearLayout{
                 Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
             }
         }
-//        switch (requestCode) {
-//            case REQUEST_CODE_CAMERA:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    photo();
-//                } else {
-//                    Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
-//                }
-//                break;
-//            case REQUEST_CODE_READ_EXTERNAL_STORAGE:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    bucketList1.clear();
-//                    Intent intent = new Intent(context, ImageBucketActivity.class);
-//                    intent.putExtra("maxPictureNum",maxPhotoNum);
-//                    activity.startActivityForResult(intent,REQUEST_CODE_CHOOSE_PICTURE);
-//                } else {
-//                    Toast.makeText(context, "未授权", Toast.LENGTH_SHORT).show();
-//                }
-//                break;
-//        }
     }
     public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == activity.RESULT_OK) {

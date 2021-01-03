@@ -17,14 +17,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
         />
-<com.example.hj.mylibrary.PickPhotoView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/pickPhotoView"
-    />
-    <com.example.hj.mylibrary.PickPhotoView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pickPhotoView1"
-        />
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal"
+     >
+     <com.example.hj.mylibrary.PickPhotoView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:id="@+id/pickPhotoView"
+         />
+     <com.example.hj.mylibrary.PickPhotoView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:id="@+id/pickPhotoView1"
+         />
+ </LinearLayout>
 </LinearLayout>
