@@ -18,7 +18,7 @@ allprojects {
 2.Add the dependency  
 ```java  
 dependencies {
-    implementation 'com.github.hanjie511:PickPhotoView:v2.2.0'
+    implementation 'com.github.hanjie511:PickPhotoView:v2.2.1'
   }  
 ```  
 * Maven  
@@ -32,7 +32,7 @@ dependencies {
 <dependency>
     <groupId>com.github.hanjie511</groupId>
     <artifactId>PickPhotoView</artifactId>
-    <version>2.2.0</version>
+    <version>2.2.1</version>
 </dependency>  
 ```
 ## 在项目中引用  
@@ -55,6 +55,7 @@ pickPhotoView.setREQUEST_CODE_CHOOSE_PICTURE(int requestCode);\\设置从相册�
 pickPhotoView.setREQUEST_CODE_PREVIEW_PICTURE(int requestCode);\\设置预览照片的requestCode
 pickPhotoView.setREQUEST_CODE_READ_EXTERNAL_STORAGE(int requestCode);\\设置读取外部存储权限的requestCode
 pickPhotoView.setMaxPhotoNumber(int count);//设置最多可以选择图片的数量，可以不用设置，默认为9张
+pickPhotoView.setRecyclerViewColumn(int count);//设置显示照片控件的列数
 pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
     @Override
     public void getPhotoList(List<String> pathList) {
@@ -64,6 +65,7 @@ pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedList
         .  
       }
     });
+pickPhotoView.initView(Context ctx);  
 ```  
 * Step3 在调用的Activity中重写两个方法  
 ```java  
@@ -91,6 +93,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
     System.out.println("pathList.size:"+pathList.size());
     }
   });
+ pickPhotoView.initView(MainActivity.this);
  pickPhotoView1=findViewById(R.id.pickPhotoView1);
  pickPhotoView1.setMaxPhotoNumber(4);
  pickPhotoView1.setREQUEST_CODE_CAMERA(5);
@@ -104,6 +107,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
    }
  });
  }
+ pickPhotoView1.initView(MainActivity.this);
  @Override
  protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
  super.onActivityResult(requestCode, resultCode, data);
