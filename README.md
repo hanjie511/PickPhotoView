@@ -18,7 +18,7 @@ allprojects {
 2.Add the dependency  
 ```java  
 dependencies {
-    implementation 'com.github.hanjie511:PickPhotoView:v2.2.1'
+    implementation 'com.github.hanjie511:PickPhotoView:v2.2.2'
   }  
 ```  
 * Maven  
@@ -32,7 +32,7 @@ dependencies {
 <dependency>
     <groupId>com.github.hanjie511</groupId>
     <artifactId>PickPhotoView</artifactId>
-    <version>2.2.1</version>
+    <version>2.2.2</version>
 </dependency>  
 ```
 ## 在项目中引用  
