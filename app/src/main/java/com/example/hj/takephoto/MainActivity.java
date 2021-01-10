@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pickPhotoView.setREQUEST_CODE_CHOOSE_PICTURE(2);
         pickPhotoView.setREQUEST_CODE_PREVIEW_PICTURE(3);
         pickPhotoView.setREQUEST_CODE_READ_EXTERNAL_STORAGE(4);
+        pickPhotoView.setFileProviderAuthority("com.example.hj.takephoto.fileprovider");
         pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
             @Override
             public void getPhotoList(List<String> pathList) {
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pickPhotoView1.setREQUEST_CODE_CHOOSE_PICTURE(6);
         pickPhotoView1.setREQUEST_CODE_PREVIEW_PICTURE(7);
         pickPhotoView1.setREQUEST_CODE_READ_EXTERNAL_STORAGE(8);
+        pickPhotoView1.setFileProviderAuthority("com.example.hj.takephoto.fileprovider");
         pickPhotoView1.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
             @Override
             public void getPhotoList(List<String> pathList) {

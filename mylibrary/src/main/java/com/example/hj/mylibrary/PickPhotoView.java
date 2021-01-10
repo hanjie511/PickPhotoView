@@ -60,6 +60,11 @@ public class PickPhotoView extends LinearLayout{
     public List<Uri> bucketList1 = new ArrayList<>();
     private int maxPhotoNum=9;
 
+    public void setFileProviderAuthority(String fileProviderAuthority) {
+        this.fileProviderAuthority = fileProviderAuthority;
+    }
+
+    private String fileProviderAuthority;
     public int getRecyclerViewColumn() {
         return recyclerViewColumn;
     }
@@ -357,8 +362,15 @@ public class PickPhotoView extends LinearLayout{
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
+                if(fileProviderAuthority==null){
+                    try {
+                        throw new Exception("The authority is null");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
                 Uri photoURI = FileProvider.getUriForFile(context,
-                        "com.example.hj.mylibrary.fileprovider",
+                        fileProviderAuthority,
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 activity.startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);

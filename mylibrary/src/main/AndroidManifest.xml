@@ -20,15 +20,15 @@
         <activity android:name=".ImageBucketActivity"
             android:theme="@style/AppTheme1"
             />
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.hj.mylibrary.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_path" />
-        </provider>
+<!--        <provider-->
+<!--            android:name="androidx.core.content.FileProvider"-->
+<!--            android:authorities="com.example.hj.mylibrary.fileprovider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/file_path" />-->
+<!--        </provider>-->
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
