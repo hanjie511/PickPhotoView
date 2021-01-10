@@ -18,7 +18,7 @@ allprojects {
 2.Add the dependency  
 ```java  
 dependencies {
-    implementation 'com.github.hanjie511:PickPhotoView:v2.2.2'
+    implementation 'com.github.hanjie511:PickPhotoView:2.2.3'
   }  
 ```  
 * Maven  
@@ -32,7 +32,7 @@ dependencies {
 <dependency>
     <groupId>com.github.hanjie511</groupId>
     <artifactId>PickPhotoView</artifactId>
-    <version>2.2.2</version>
+    <version>2.2.3</version>
 </dependency>  
 ```
 ## 在项目中引用  
@@ -56,6 +56,7 @@ pickPhotoView.setREQUEST_CODE_PREVIEW_PICTURE(int requestCode);\\设置预览照
 pickPhotoView.setREQUEST_CODE_READ_EXTERNAL_STORAGE(int requestCode);\\设置读取外部存储权限的requestCode
 pickPhotoView.setMaxPhotoNumber(int count);//设置最多可以选择图片的数量，可以不用设置，默认为9张
 pickPhotoView.setRecyclerViewColumn(int count);//设置显示照片控件的列数
+pickPhotoView.setFileProviderAuthority(String authority);
 pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
     @Override
     public void getPhotoList(List<String> pathList) {
@@ -79,7 +80,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
     pickPhotoView.handleRequestPermissionResult(requestCode,permissions,grantResults);
   }  
 ```  
-* eg:  
+* sample:  
 ```java  
  pickPhotoView=findViewById(R.id.pickPhotoView);
  pickPhotoView.setMaxPhotoNumber(9);
@@ -87,6 +88,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
  pickPhotoView.setREQUEST_CODE_CHOOSE_PICTURE(2);
  pickPhotoView.setREQUEST_CODE_PREVIEW_PICTURE(3);
  pickPhotoView.setREQUEST_CODE_READ_EXTERNAL_STORAGE(4);
+ pickPhotoView.setFileProviderAuthority("com.example.hj.takephoto.fileprovider");
  pickPhotoView.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
   @Override
   public void getPhotoList(List<String> pathList) {
@@ -100,6 +102,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
  pickPhotoView1.setREQUEST_CODE_CHOOSE_PICTURE(6);
  pickPhotoView1.setREQUEST_CODE_PREVIEW_PICTURE(7);
  pickPhotoView1.setREQUEST_CODE_READ_EXTERNAL_STORAGE(8);
+ pickPhotoView1.setFileProviderAuthority("com.example.hj.takephoto.fileprovider");
  pickPhotoView1.setPhotoListChangedListener(new PickPhotoView.PhotoListChangedListener() {
  @Override
  public void getPhotoList(List<String> pathList) {
