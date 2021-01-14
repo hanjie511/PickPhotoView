@@ -212,48 +212,49 @@ public class PickPhotoView extends LinearLayout{
                 galleryAddPic();
                 photoList.add(contentUri);
                 photoList1.add(currentPhotoPath);
+                adapter.notifyDataSetChanged();
                 photoListChangedListener.getPhotoList(photoList1);
-                adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
-                recycler_hj_pickphoto.setAdapter(adapter);
-                adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void click(RecyclerView.ViewHolder holder, int position) throws Exception {
-                        if(REQUEST_CODE_CAMERA==-1||REQUEST_CODE_CHOOSE_PICTURE==-1||REQUEST_CODE_PREVIEW_PICTURE==-1||REQUEST_CODE_READ_EXTERNAL_STORAGE==-1){
-                            throw new Exception("REQUEST_CODE not init Exception");
-                        }
-                        PopupMenu menu = new PopupMenu(context, holder.itemView, Gravity.BOTTOM);
-                        final PopupMenu menu1 = menu;
-                        menu.getMenuInflater().inflate(R.menu.pop_menu, menu.getMenu());
-                        menu.show();
-                        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItem) {
-                                int itemId = menuItem.getItemId();
-                                if (itemId == R.id.goPhoto_hj_pickphoto) {
-                                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                                        photo();
-                                    } else {
-                                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
-                                    }
-                                } else if (itemId == R.id.goPicture_hj_pickphoto) {
-                                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                                        bucketList1.clear();
-                                        Intent intent = new Intent(context, ImageBucketActivity.class);
-                                        intent.putExtra("maxPictureNum",maxPhotoNum);
-                                        intent.putExtra("requestCode",REQUEST_CODE_CHOOSE_PICTURE);
-                                        activity.startActivityForResult(intent,REQUEST_CODE_CHOOSE_PICTURE);
-                                    } else {
-                                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_READ_EXTERNAL_STORAGE);
-                                    }
-                                } else if (itemId == R.id.cancel_delete_hj_pickphoto) {
-                                    menu1.dismiss();
-                                }
-                                return true;
-                            }
-                        });
+//                adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
+//                recycler_hj_pickphoto.setAdapter(adapter);
+//                adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+//                    @Override
+//                    public void click(RecyclerView.ViewHolder holder, int position) throws Exception {
+//                        if(REQUEST_CODE_CAMERA==-1||REQUEST_CODE_CHOOSE_PICTURE==-1||REQUEST_CODE_PREVIEW_PICTURE==-1||REQUEST_CODE_READ_EXTERNAL_STORAGE==-1){
+//                            throw new Exception("REQUEST_CODE not init Exception");
+//                        }
+//                        PopupMenu menu = new PopupMenu(context, holder.itemView, Gravity.BOTTOM);
+//                        final PopupMenu menu1 = menu;
+//                        menu.getMenuInflater().inflate(R.menu.pop_menu, menu.getMenu());
+//                        menu.show();
+//                        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                            @Override
+//                            public boolean onMenuItemClick(MenuItem menuItem) {
+//                                int itemId = menuItem.getItemId();
+//                                if (itemId == R.id.goPhoto_hj_pickphoto) {
+//                                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//                                        photo();
+//                                    } else {
+//                                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+//                                    }
+//                                } else if (itemId == R.id.goPicture_hj_pickphoto) {
+//                                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                                        bucketList1.clear();
+//                                        Intent intent = new Intent(context, ImageBucketActivity.class);
+//                                        intent.putExtra("maxPictureNum",maxPhotoNum);
+//                                        intent.putExtra("requestCode",REQUEST_CODE_CHOOSE_PICTURE);
+//                                        activity.startActivityForResult(intent,REQUEST_CODE_CHOOSE_PICTURE);
+//                                    } else {
+//                                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_READ_EXTERNAL_STORAGE);
+//                                    }
+//                                } else if (itemId == R.id.cancel_delete_hj_pickphoto) {
+//                                    menu1.dismiss();
+//                                }
+//                                return true;
+//                            }
+//                        });
 
-                    }
-                });
+//                    }
+//                });
             }
         }else if(requestCode==REQUEST_CODE_CHOOSE_PICTURE){//选择相册图片的回调
             String [] array=data.getStringArrayExtra("chooseImagePicture");
@@ -265,8 +266,9 @@ public class PickPhotoView extends LinearLayout{
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
-                    recycler_hj_pickphoto.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+//                    adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
+//                    recycler_hj_pickphoto.setAdapter(adapter);
                 }
             });
             photoListChangedListener.getPhotoList(photoList1);
@@ -279,8 +281,9 @@ public class PickPhotoView extends LinearLayout{
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
-                    recycler_hj_pickphoto.setAdapter(adapter);
+//                    adapter = new RecyclerAdapter(photoList1, context,maxPhotoNum,activity,REQUEST_CODE_PREVIEW_PICTURE);
+//                    recycler_hj_pickphoto.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                     photoListChangedListener.getPhotoList(photoList1);
                 }
             });
